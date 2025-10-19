@@ -61,6 +61,28 @@
 - Female: Ovaries (eggs), Estrogen/Progesterone
 - Menstrual cycle: ~28 days
 
+## Cellular & Molecular Biology
+
+### DNA, RNA, and Protein Synthesis
+- DNA structure: Double helix, nucleotides (A, T, G, C)
+- DNA replication: Helicase unwinds, DNA polymerase copies
+- Transcription: DNA → mRNA (in nucleus)
+- Translation: mRNA → Protein (at ribosomes)
+- Central Dogma: DNA → RNA → Protein
+
+### Cellular Respiration
+- Glycolysis: Glucose → Pyruvate (cytoplasm, 2 ATP)
+- Krebs Cycle: Pyruvate → CO2 (mitochondria)
+- Electron Transport Chain: Produces most ATP (~34 ATP)
+- Total: ~36-38 ATP per glucose
+- Anaerobic: Fermentation (lactic acid or alcohol)
+
+### Plasma Membrane
+- Phospholipid bilayer: Hydrophilic heads, hydrophobic tails
+- Fluid mosaic model: Proteins embedded in membrane
+- Transport: Diffusion, osmosis, active transport, facilitated diffusion
+- Selective permeability
+
 ## Key Concepts
 
 ### Homeostasis
