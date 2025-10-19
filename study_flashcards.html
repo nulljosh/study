@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Flashcards - Anatomy & Precalculus</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Mobile-first base styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 1.75rem;
+            margin-bottom: 8px;
+        }
+
+        .subject-tabs {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .tab.active {
+            background: white;
+            color: #1a1a1a;
+        }
+
+        .card-container {
+            perspective: 1000px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px 20px;
+            min-height: 350px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            position: relative;
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            backface-visibility: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow-y: auto;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+        }
+
+        .card h2 {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .card p, .card ul {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.6;
+            text-align: left;
+        }
+
+        .card ul {
+            list-style-position: inside;
+        }
+
+        .card li {
+            margin-bottom: 6px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn {
+            background: white;
+            color: #1a1a1a;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .progress {
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .shuffle-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .hint {
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 8px;
+            font-size: 0.8rem;
+        }
+
+        /* Tablet breakpoint - 600px and up */
+        @media (min-width: 600px) {
+            body {
+                padding: 20px;
+            }
+
+            .header {
+                margin-bottom: 25px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .subject-tabs {
+                gap: 10px;
+                margin-bottom: 25px;
+            }
+
+            .tab {
+                padding: 12px 25px;
+                font-size: 0.95rem;
+            }
+
+            .card {
+                border-radius: 18px;
+                padding: 40px 30px;
+                min-height: 380px;
+            }
+
+            .card-face {
+                padding: 40px 30px;
+            }
+
+            .card h2 {
+                font-size: 1.5rem;
+                margin-bottom: 18px;
+            }
+
+            .card p, .card ul {
+                font-size: 1rem;
+                line-height: 1.7;
+            }
+
+            .card li {
+                margin-bottom: 7px;
+            }
+
+            .btn {
+                padding: 13px 25px;
+                font-size: 0.95rem;
+            }
+
+            .progress {
+                font-size: 1.1rem;
+            }
+
+            .shuffle-btn {
+                width: auto;
+                margin-top: 18px;
+            }
+
+            .hint {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Desktop breakpoint - 900px and up */
+        @media (min-width: 900px) {
+            body {
+                padding: 30px;
+            }
+
+            .header {
+                margin-bottom: 30px;
+            }
+
+            .header h1 {
+                font-size: 2.5rem;
+                margin-bottom: 10px;
+            }
+
+            .subject-tabs {
+                margin-bottom: 30px;
+            }
+
+            .tab {
+                padding: 12px 30px;
+                font-size: 1rem;
+            }
+
+            .card-container {
+                margin-bottom: 30px;
+            }
+
+            .card {
+                border-radius: 20px;
+                padding: 60px 40px;
+                min-height: 400px;
+            }
+
+            .card-face {
+                padding: 60px 40px;
+            }
+
+            .card h2 {
+                font-size: 1.8rem;
+                margin-bottom: 20px;
+            }
+
+            .card p, .card ul {
+                font-size: 1.1rem;
+                line-height: 1.8;
+            }
+
+            .card li {
+                margin-bottom: 8px;
+            }
+
+            .controls {
+                gap: 20px;
+            }
+
+            .btn {
+                padding: 15px 30px;
+                font-size: 1rem;
+            }
+
+            .progress {
+                font-size: 1.2rem;
+            }
+
+            .shuffle-btn {
+                margin-top: 20px;
+            }
+
+            .hint {
+                font-size: 0.9rem;
+                margin-top: 10px;
+            }
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Study Flashcards</h1>
+            <p class="hint">Click card to flip • Use arrow keys to navigate</p>
+        </div>
+
+        <div class="subject-tabs">
+            <button class="tab active" onclick="switchSubject('anatomy')">Anatomy & Physiology</button>
+            <button class="tab" onclick="switchSubject('precalc')">Precalculus</button>
+        </div>
+
+        <div class="card-container">
+            <div class="card" onclick="flipCard()">
+                <div class="card-face card-front">
+                    <h2 id="question"></h2>
+                </div>
+                <div class="card-face card-back">
+                    <div id="answer"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn" onclick="previousCard()" id="prevBtn">← Previous</button>
+            <div class="progress">
+                <span id="current">1</span> / <span id="total">0</span>
+            </div>
+            <button class="btn" onclick="nextCard()" id="nextBtn">Next →</button>
+        </div>
+
+        <div style="text-align: center;">
+            <button class="btn shuffle-btn" onclick="shuffleCards()">🔀 Shuffle Cards</button>
+        </div>
+    </div>
+
+    <script>
+        const flashcards = {
+            anatomy: [
+                {
+                    q: "What are the 4 tissue types?",
+                    a: "<ul><li><strong>Epithelial:</strong> Covers surfaces, protection/absorption</li><li><strong>Connective:</strong> Support, binds (bone, blood, fat)</li><li><strong>Muscle:</strong> Movement (skeletal, cardiac, smooth)</li><li><strong>Nervous:</strong> Communication (neurons, glial cells)</li></ul>"
+                },
+                {
+                    q: "Name the 4 chambers of the heart",
+                    a: "<ul><li>Right Atrium (RA)</li><li>Right Ventricle (RV)</li><li>Left Atrium (LA)</li><li>Left Ventricle (LV)</li></ul><p><strong>Flow:</strong> Veins → RA → RV → Lungs → LA → LV → Arteries → Body</p>"
+                },
+                {
+                    q: "Respiratory system pathway",
+                    a: "<p>Nose/Mouth → Pharynx → Larynx → Trachea → Bronchi → Lungs → Alveoli</p><p><strong>Gas exchange:</strong> O₂ in, CO₂ out (diffusion at alveoli)</p>"
+                },
+                {
+                    q: "Digestive system pathway",
+                    a: "<p>Mouth → Esophagus → Stomach → Small intestine → Large intestine → Rectum</p><p><strong>Key enzymes:</strong> Amylase (carbs), Pepsin (protein), Lipase (fats)</p>"
+                },
+                {
+                    q: "What is homeostasis?",
+                    a: "<p>Body maintains stable internal environment</p><ul><li><strong>Negative feedback:</strong> Response reverses stimulus (like a thermostat)</li><li><strong>Positive feedback:</strong> Response amplifies stimulus (childbirth contractions)</li></ul>"
+                },
+                {
+                    q: "Parts of a neuron",
+                    a: "<ul><li><strong>Dendrites:</strong> Receive signals</li><li><strong>Cell body:</strong> Contains nucleus</li><li><strong>Axon:</strong> Sends signals away</li><li><strong>Synapse:</strong> Gap between neurons (chemical/electrical transmission)</li></ul>"
+                },
+                {
+                    q: "Directional terms: Superior vs Inferior",
+                    a: "<ul><li><strong>Superior:</strong> Above (head is superior to feet)</li><li><strong>Inferior:</strong> Below (feet are inferior to head)</li></ul>"
+                },
+                {
+                    q: "Directional terms: Anterior vs Posterior",
+                    a: "<ul><li><strong>Anterior:</strong> Front (nose is anterior)</li><li><strong>Posterior:</strong> Back (spine is posterior)</li></ul>"
+                },
+                {
+                    q: "Directional terms: Proximal vs Distal",
+                    a: "<ul><li><strong>Proximal:</strong> Near point of attachment (shoulder is proximal to hand)</li><li><strong>Distal:</strong> Far from point of attachment (hand is distal to shoulder)</li></ul>"
+                },
+                {
+                    q: "What are the 3 body planes?",
+                    a: "<ul><li><strong>Sagittal:</strong> Divides left/right</li><li><strong>Frontal (Coronal):</strong> Divides front/back</li><li><strong>Transverse:</strong> Divides top/bottom</li></ul>"
+                },
+                {
+                    q: "Cranial nerves mnemonic",
+                    a: "<p><strong>'Oh Oh Oh To Touch And Feel Very Good Velvet AH'</strong></p><ol><li>Olfactory</li><li>Optic</li><li>Oculomotor</li><li>Trochlear</li><li>Trigeminal</li><li>Abducens</li><li>Facial</li><li>Vestibulocochlear</li><li>Glossopharyngeal</li><li>Vagus</li><li>Accessory</li><li>Hypoglossal</li></ol>"
+                },
+                {
+                    q: "Key cell organelles and functions",
+                    a: "<ul><li><strong>Nucleus:</strong> DNA/control center</li><li><strong>Mitochondria:</strong> Energy (ATP)</li><li><strong>Ribosomes:</strong> Protein synthesis</li><li><strong>ER:</strong> Transport, protein/lipid synthesis</li><li><strong>Golgi:</strong> Package/modify proteins</li><li><strong>Lysosomes:</strong> Digestion/cleanup</li></ul>"
+                },
+                {
+                    q: "Types of muscle tissue",
+                    a: "<ul><li><strong>Skeletal:</strong> Voluntary, attached to bones, striated</li><li><strong>Cardiac:</strong> Involuntary, heart only, striated, branched</li><li><strong>Smooth:</strong> Involuntary, organs/vessels, non-striated</li></ul>"
+                },
+                {
+                    q: "Kidney function and nephron",
+                    a: "<p><strong>Function:</strong> Filter blood, remove waste (urea), regulate water/electrolytes</p><p><strong>Nephron:</strong> Functional unit</p><ul><li>Filtration</li><li>Reabsorption</li><li>Secretion</li></ul>"
+                },
+                {
+                    q: "Major endocrine glands",
+                    a: "<ul><li><strong>Pituitary:</strong> Master gland</li><li><strong>Thyroid:</strong> Metabolism</li><li><strong>Adrenal:</strong> Stress response</li><li><strong>Pancreas:</strong> Blood sugar (insulin)</li><li><strong>Gonads:</strong> Sex hormones</li></ul>"
+                }
+            ],
+            precalc: [
+                {
+                    q: "Quadratic formula",
+                    a: "<p><code>x = [-b ± √(b² - 4ac)] / (2a)</code></p><p><strong>Discriminant (b² - 4ac):</strong></p><ul><li>Positive: 2 real roots</li><li>Zero: 1 real root</li><li>Negative: No real roots (2 complex)</li></ul>"
+                },
+                {
+                    q: "Function transformations",
+                    a: "<ul><li><code>f(x) + k</code>: Shift UP k units</li><li><code>f(x) - k</code>: Shift DOWN k units</li><li><code>f(x + h)</code>: Shift LEFT h units</li><li><code>f(x - h)</code>: Shift RIGHT h units</li><li><code>-f(x)</code>: Reflect over x-axis</li><li><code>f(-x)</code>: Reflect over y-axis</li><li><code>a·f(x)</code>: Vertical stretch/compress</li></ul>"
+                },
+                {
+                    q: "Properties of exponents",
+                    a: "<ul><li><code>xᵃ · xᵇ = xᵃ⁺ᵇ</code></li><li><code>xᵃ / xᵇ = xᵃ⁻ᵇ</code></li><li><code>(xᵃ)ᵇ = xᵃᵇ</code></li><li><code>(xy)ᵃ = xᵃyᵃ</code></li><li><code>x⁰ = 1</code></li><li><code>x⁻ᵃ = 1/xᵃ</code></li></ul>"
+                },
+                {
+                    q: "Log properties",
+                    a: "<ul><li><code>log(xy) = log(x) + log(y)</code></li><li><code>log(x/y) = log(x) - log(y)</code></li><li><code>log(xⁿ) = n·log(x)</code></li><li><code>logₐ(a) = 1</code></li><li><code>logₐ(1) = 0</code></li></ul><p><strong>Change of base:</strong> <code>logₐ(x) = log(x)/log(a)</code></p>"
+                },
+                {
+                    q: "Unit circle: sin, cos, tan at 0°",
+                    a: "<ul><li>sin(0°) = 0</li><li>cos(0°) = 1</li><li>tan(0°) = 0</li></ul>"
+                },
+                {
+                    q: "Unit circle: sin, cos, tan at 30°",
+                    a: "<ul><li>sin(30°) = 1/2</li><li>cos(30°) = √3/2</li><li>tan(30°) = √3/3</li></ul>"
+                },
+                {
+                    q: "Unit circle: sin, cos, tan at 45°",
+                    a: "<ul><li>sin(45°) = √2/2</li><li>cos(45°) = √2/2</li><li>tan(45°) = 1</li></ul>"
+                },
+                {
+                    q: "Unit circle: sin, cos, tan at 60°",
+                    a: "<ul><li>sin(60°) = √3/2</li><li>cos(60°) = 1/2</li><li>tan(60°) = √3</li></ul>"
+                },
+                {
+                    q: "Unit circle: sin, cos, tan at 90°",
+                    a: "<ul><li>sin(90°) = 1</li><li>cos(90°) = 0</li><li>tan(90°) = undefined</li></ul>"
+                },
+                {
+                    q: "Pythagorean identities",
+                    a: "<ul><li><code>sin²(θ) + cos²(θ) = 1</code></li><li><code>tan²(θ) + 1 = sec²(θ)</code></li><li><code>1 + cot²(θ) = csc²(θ)</code></li></ul>"
+                },
+                {
+                    q: "Trig function definitions (SOH CAH TOA)",
+                    a: "<ul><li><code>sin(θ) = opposite/hypotenuse</code></li><li><code>cos(θ) = adjacent/hypotenuse</code></li><li><code>tan(θ) = opposite/adjacent</code></li></ul><p><strong>Reciprocals:</strong></p><ul><li><code>csc = 1/sin</code></li><li><code>sec = 1/cos</code></li><li><code>cot = 1/tan</code></li></ul>"
+                },
+                {
+                    q: "Rational function asymptotes",
+                    a: "<p>For <code>f(x) = P(x)/Q(x)</code>:</p><p><strong>Vertical asymptote:</strong> Set <code>Q(x) = 0</code></p><p><strong>Horizontal asymptote:</strong></p><ul><li>deg(P) < deg(Q): y = 0</li><li>deg(P) = deg(Q): y = leading coeff ratio</li><li>deg(P) > deg(Q): No horizontal asymptote</li></ul>"
+                },
+                {
+                    q: "Arithmetic sequence formulas",
+                    a: "<p><strong>nth term:</strong> <code>aₙ = a₁ + (n-1)d</code></p><p><strong>Sum of n terms:</strong> <code>Sₙ = n/2(a₁ + aₙ)</code></p><p>or <code>Sₙ = n/2(2a₁ + (n-1)d)</code></p>"
+                },
+                {
+                    q: "Geometric sequence formulas",
+                    a: "<p><strong>nth term:</strong> <code>aₙ = a₁·rⁿ⁻¹</code></p><p><strong>Sum of n terms:</strong> <code>Sₙ = a₁(1 - rⁿ)/(1 - r)</code></p><p><strong>Infinite sum (|r| < 1):</strong> <code>S = a₁/(1 - r)</code></p>"
+                },
+                {
+                    q: "Permutations vs Combinations",
+                    a: "<p><strong>Permutations (order matters):</strong></p><p><code>ₙPᵣ = n!/(n-r)!</code></p><p><strong>Combinations (order doesn't matter):</strong></p><p><code>ₙCᵣ = n!/[r!(n-r)!]</code></p>"
+                },
+                {
+                    q: "Exponential growth/decay",
+                    a: "<p><strong>Growth:</strong> <code>A = A₀(1 + r)ᵗ</code></p><p><strong>Decay:</strong> <code>A = A₀(1 - r)ᵗ</code></p><p><strong>Continuous:</strong> <code>A = A₀eᵏᵗ</code></p>"
+                },
+                {
+                    q: "Vertex of quadratic",
+                    a: "<p>For <code>f(x) = ax² + bx + c</code>:</p><p><strong>x-coordinate of vertex:</strong> <code>x = -b/(2a)</code></p><p>Then plug in to find y</p><p><strong>Axis of symmetry:</strong> <code>x = -b/(2a)</code></p>"
+                },
+                {
+                    q: "Trig graph transformations",
+                    a: "<p>For <code>y = a·sin(b(x - c)) + d</code>:</p><ul><li><strong>a:</strong> Amplitude</li><li><strong>b:</strong> Affects period (Period = 2π/b)</li><li><strong>c:</strong> Horizontal shift (phase shift)</li><li><strong>d:</strong> Vertical shift</li></ul>"
+                },
+                {
+                    q: "Double angle formulas",
+                    a: "<ul><li><code>sin(2θ) = 2sin(θ)cos(θ)</code></li><li><code>cos(2θ) = cos²(θ) - sin²(θ)</code></li></ul>"
+                }
+            ]
+        };
+
+        let currentSubject = 'anatomy';
+        let currentIndex = 0;
+        let currentDeck = [...flashcards.anatomy];
+
+        function updateCard() {
+            const card = currentDeck[currentIndex];
+            document.getElementById('question').innerHTML = card.q;
+            document.getElementById('answer').innerHTML = card.a;
+            document.getElementById('current').textContent = currentIndex + 1;
+            document.getElementById('total').textContent = currentDeck.length;
+
+            document.querySelector('.card').classList.remove('flipped');
+
+            document.getElementById('prevBtn').disabled = currentIndex === 0;
+            document.getElementById('nextBtn').disabled = currentIndex === currentDeck.length - 1;
+        }
+
+        function flipCard() {
+            document.querySelector('.card').classList.toggle('flipped');
+        }
+
+        function nextCard() {
+            if (currentIndex < currentDeck.length - 1) {
+                currentIndex++;
+                updateCard();
+            }
+        }
+
+        function previousCard() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateCard();
+            }
+        }
+
+        function switchSubject(subject) {
+            currentSubject = subject;
+            currentDeck = [...flashcards[subject]];
+            currentIndex = 0;
+
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            updateCard();
+        }
+
+        function shuffleCards() {
+            for (let i = currentDeck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [currentDeck[i], currentDeck[j]] = [currentDeck[j], currentDeck[i]];
+            }
+            currentIndex = 0;
+            updateCard();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextCard();
+            if (e.key === 'ArrowLeft') previousCard();
+            if (e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                flipCard();
+            }
+        });
+
+        updateCard();
+    </script>
+</body>
+</html>
