@@ -4,341 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Study Flashcards - Anatomy & Precalculus</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* Mobile-first base styles */
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 15px;
-        }
-
-        .container {
-            max-width: 800px;
-            width: 100%;
-        }
-
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 20px;
-        }
-
-        .header h1 {
-            font-size: 1.75rem;
-            margin-bottom: 8px;
-        }
-
-        .subject-tabs {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .tab {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 2px solid white;
-            padding: 10px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 600;
-            transition: all 0.3s;
-            white-space: nowrap;
-        }
-
-        .tab:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .tab.active {
-            background: white;
-            color: #1a1a1a;
-        }
-
-        .card-container {
-            perspective: 1000px;
-            margin-bottom: 20px;
-        }
-
-        .card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px 20px;
-            min-height: 350px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            cursor: pointer;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-            position: relative;
-        }
-
-        .card.flipped {
-            transform: rotateY(180deg);
-        }
-
-        .card-face {
-            backface-visibility: hidden;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            padding: 30px 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            overflow-y: auto;
-        }
-
-        .card-back {
-            transform: rotateY(180deg);
-        }
-
-        .card h2 {
-            font-size: 1.3rem;
-            color: #333;
-            margin-bottom: 15px;
-        }
-
-        .card p, .card ul {
-            font-size: 0.95rem;
-            color: #666;
-            line-height: 1.6;
-            text-align: left;
-        }
-
-        .card ul {
-            list-style-position: inside;
-        }
-
-        .card li {
-            margin-bottom: 6px;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .btn {
-            background: white;
-            color: #1a1a1a;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 25px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .progress {
-            color: white;
-            font-size: 1rem;
-            font-weight: 600;
-        }
-
-        .shuffle-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 2px solid white;
-            margin-top: 15px;
-            width: 100%;
-        }
-
-        .hint {
-            color: rgba(255, 255, 255, 0.8);
-            margin-top: 8px;
-            font-size: 0.8rem;
-        }
-
-        /* Tablet breakpoint - 600px and up */
-        @media (min-width: 600px) {
-            body {
-                padding: 20px;
-            }
-
-            .header {
-                margin-bottom: 25px;
-            }
-
-            .header h1 {
-                font-size: 2rem;
-            }
-
-            .subject-tabs {
-                gap: 10px;
-                margin-bottom: 25px;
-            }
-
-            .tab {
-                padding: 12px 25px;
-                font-size: 0.95rem;
-            }
-
-            .card {
-                border-radius: 18px;
-                padding: 40px 30px;
-                min-height: 380px;
-            }
-
-            .card-face {
-                padding: 40px 30px;
-            }
-
-            .card h2 {
-                font-size: 1.5rem;
-                margin-bottom: 18px;
-            }
-
-            .card p, .card ul {
-                font-size: 1rem;
-                line-height: 1.7;
-            }
-
-            .card li {
-                margin-bottom: 7px;
-            }
-
-            .btn {
-                padding: 13px 25px;
-                font-size: 0.95rem;
-            }
-
-            .progress {
-                font-size: 1.1rem;
-            }
-
-            .shuffle-btn {
-                width: auto;
-                margin-top: 18px;
-            }
-
-            .hint {
-                font-size: 0.85rem;
-            }
-        }
-
-        /* Desktop breakpoint - 900px and up */
-        @media (min-width: 900px) {
-            body {
-                padding: 30px;
-            }
-
-            .header {
-                margin-bottom: 30px;
-            }
-
-            .header h1 {
-                font-size: 2.5rem;
-                margin-bottom: 10px;
-            }
-
-            .subject-tabs {
-                margin-bottom: 30px;
-            }
-
-            .tab {
-                padding: 12px 30px;
-                font-size: 1rem;
-            }
-
-            .card-container {
-                margin-bottom: 30px;
-            }
-
-            .card {
-                border-radius: 20px;
-                padding: 60px 40px;
-                min-height: 400px;
-            }
-
-            .card-face {
-                padding: 60px 40px;
-            }
-
-            .card h2 {
-                font-size: 1.8rem;
-                margin-bottom: 20px;
-            }
-
-            .card p, .card ul {
-                font-size: 1.1rem;
-                line-height: 1.8;
-            }
-
-            .card li {
-                margin-bottom: 8px;
-            }
-
-            .controls {
-                gap: 20px;
-            }
-
-            .btn {
-                padding: 15px 30px;
-                font-size: 1rem;
-            }
-
-            .progress {
-                font-size: 1.2rem;
-            }
-
-            .shuffle-btn {
-                margin-top: 20px;
-            }
-
-            .hint {
-                font-size: 0.9rem;
-                margin-top: 10px;
-            }
-        }
-
-        code {
-            background: #f4f4f4;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-family: 'Courier New', monospace;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>Study Flashcards</h1>
-            <p class="hint">Click card to flip • Use arrow keys to navigate</p>
+            <p class="hint">Click card to flip - Use arrow keys to navigate</p>
         </div>
 
         <div class="subject-tabs">
@@ -358,15 +30,15 @@
         </div>
 
         <div class="controls">
-            <button class="btn" onclick="previousCard()" id="prevBtn">← Previous</button>
+            <button class="btn" onclick="previousCard()" id="prevBtn">Previous</button>
             <div class="progress">
                 <span id="current">1</span> / <span id="total">0</span>
             </div>
-            <button class="btn" onclick="nextCard()" id="nextBtn">Next →</button>
+            <button class="btn" onclick="nextCard()" id="nextBtn">Next</button>
         </div>
 
         <div style="text-align: center;">
-            <button class="btn shuffle-btn" onclick="shuffleCards()">🔀 Shuffle Cards</button>
+            <button class="btn shuffle-btn" onclick="shuffleCards()">Shuffle Cards</button>
         </div>
     </div>
 
@@ -379,15 +51,15 @@
                 },
                 {
                     q: "Name the 4 chambers of the heart",
-                    a: "<ul><li>Right Atrium (RA)</li><li>Right Ventricle (RV)</li><li>Left Atrium (LA)</li><li>Left Ventricle (LV)</li></ul><p><strong>Flow:</strong> Veins → RA → RV → Lungs → LA → LV → Arteries → Body</p>"
+                    a: "<ul><li>Right Atrium (RA)</li><li>Right Ventricle (RV)</li><li>Left Atrium (LA)</li><li>Left Ventricle (LV)</li></ul><p><strong>Flow:</strong> Veins - RA - RV - Lungs - LA - LV - Arteries - Body</p>"
                 },
                 {
                     q: "Respiratory system pathway",
-                    a: "<p>Nose/Mouth → Pharynx → Larynx → Trachea → Bronchi → Lungs → Alveoli</p><p><strong>Gas exchange:</strong> O₂ in, CO₂ out (diffusion at alveoli)</p>"
+                    a: "<p>Nose/Mouth - Pharynx - Larynx - Trachea - Bronchi - Lungs - Alveoli</p><p><strong>Gas exchange:</strong> O2 in, CO2 out (diffusion at alveoli)</p>"
                 },
                 {
                     q: "Digestive system pathway",
-                    a: "<p>Mouth → Esophagus → Stomach → Small intestine → Large intestine → Rectum</p><p><strong>Key enzymes:</strong> Amylase (carbs), Pepsin (protein), Lipase (fats)</p>"
+                    a: "<p>Mouth - Esophagus - Stomach - Small intestine - Large intestine - Rectum</p><p><strong>Key enzymes:</strong> Amylase (carbs), Pepsin (protein), Lipase (fats)</p>"
                 },
                 {
                     q: "What is homeostasis?",
